@@ -26,7 +26,7 @@ type
     tbAdicionarPessoa: TTabItem;
     tbExcluirPessoa: TTabItem;
     Rectangle1: TRectangle;
-    btHome: TSpeedButton;
+    btnAbriMenu: TSpeedButton;
     btBuscaPessoa: TSpeedButton;
     btAdicionarPessoa: TSpeedButton;
     btnFechar: TSpeedButton;
@@ -94,6 +94,9 @@ type
     Rectangle7: TRectangle;
     Label18: TLabel;
     Image7: TImage;
+    btnHome: TSpeedButton;
+    Image8: TImage;
+    Text5: TText;
     procedure btnFecharClick(Sender: TObject);
     procedure btBuscaPessoaClick(Sender: TObject);
     procedure btAdicionarPessoaClick(Sender: TObject);
@@ -109,6 +112,7 @@ type
     procedure rectButtonCancelarClick(Sender: TObject);
     procedure rectButtonExcluirClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure btnHomeClick(Sender: TObject);
   private
     procedure ListarPessoas;
     function ConsultaCEPViaApi(CEP: string): String;
@@ -131,16 +135,24 @@ uses
 procedure TfrmPrincipal.btAdicionarPessoaClick(Sender: TObject);
 begin
   TabControl1.TabIndex := tbAdicionarPessoa.Index;
+  MultiView1.HideMaster;
 end;
 
 procedure TfrmPrincipal.btBuscaPessoaClick(Sender: TObject);
 begin
   TabControl1.TabIndex := tbBuscarPessoa.Index;
+  MultiView1.HideMaster;
 end;
 
 procedure TfrmPrincipal.btnFecharClick(Sender: TObject);
 begin
   Application.Terminate;
+end;
+
+procedure TfrmPrincipal.btnHomeClick(Sender: TObject);
+begin
+  TabControl1.TabIndex := tbHome.Index;
+  MultiView1.HideMaster;
 end;
 
 procedure TfrmPrincipal.CAHidingFinish(Sender: TObject);
@@ -201,16 +213,20 @@ begin
 
   ControllerPessoa.ModeloPessoa.Enumerador := EnumTipoCrud.Excluir;
   ControllerPessoa.ModeloPessoa.Codigo := StrToInt(edtCodigo.Text);
+  try
+    if MessageDlg('Confirma a exclusão desse registro?',TMsgDlgType.mtConfirmation,[TMsgDlgBtn.mbYes,TMsgDlgBtn.mbNo],0) = mrYes then
+    begin
+      if ControllerPessoa.ModeloPessoa.Persistir then
+        Showmessage('Registro Excluido');
 
-  if MessageDlg('Confirma a exclusão desse registro?',TMsgDlgType.mtConfirmation,[TMsgDlgBtn.mbYes,TMsgDlgBtn.mbNo],0) = mrYes then
-  begin
-    if ControllerPessoa.ModeloPessoa.Persistir then
-      Showmessage('Registro Excluido');
-
-    LimparTelaCadastro;
-    ListarPessoas;
-    TabControl1.Index := tbBuscarPessoa.Index;
+      LimparTelaCadastro;
+      ListarPessoas;
+      TabControl1.TabIndex := tbBuscarPessoa.Index;
+    end;
+  finally
+    FreeAndNil(ControllerPessoa);
   end;
+
 end;
 
 procedure TfrmPrincipal.rectButtonSalvarClick(Sender: TObject);
@@ -272,6 +288,8 @@ begin
 
 
      LimparTelaCadastro;
+
+     TabControl1.TabIndex := tbBuscarPessoa.Index;
 
   finally
     FreeAndNil(ControllerPessoa);
@@ -379,7 +397,7 @@ end;
 
 procedure TfrmPrincipal.FormShow(Sender: TObject);
 begin
-  TabControl1.Index := tbHome.Index;
+  TabControl1.TabIndex := tbHome.Index;
 
   if Not Assigned(frmLogin) then
     Application.CreateForm(TfrmLogin,frmLogin);

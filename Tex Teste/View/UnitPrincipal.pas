@@ -93,7 +93,6 @@ type
     tbHome: TTabItem;
     Rectangle7: TRectangle;
     Label18: TLabel;
-    Image7: TImage;
     btnHome: TSpeedButton;
     Image8: TImage;
     Text5: TText;

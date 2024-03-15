@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
   FMX.Controls.Presentation, FMX.StdCtrls, FMX.Layouts, FMX.Edit, FMX.Objects,
-  FMX.Ani, System.Skia, FMX.Skia,Threading;
+  FMX.Ani, System.Skia, FMX.Skia,Loading;
 
 type
   TfrmLogin = class(TForm)
@@ -25,9 +25,11 @@ type
     procedure rectButtonLogarClick(Sender: TObject);
     procedure Image1Click(Sender: TObject);
   private
+    procedure ValidaLogin(Sender: TObject);
     { Private declarations }
   public
     { Public declarations }
+      Validado : Boolean;
   end;
 
 var
@@ -37,7 +39,7 @@ implementation
 
 {$R *.fmx}
 
-uses uControllerLogin, Loading;
+uses uControllerLogin;
 
 procedure TfrmLogin.Image1Click(Sender: TObject);
 begin
@@ -52,7 +54,7 @@ end;
 procedure TfrmLogin.rectButtonLogarClick(Sender: TObject);
 var
   ControllerLogin : TControllerLogin;
-  Validado : Boolean;
+
   
 begin
   FloatAnimation1.Start;
@@ -63,31 +65,43 @@ begin
     Abort;
 
 
-  TThread.CreateAnonymousThread(
+  var LTread := TThread.CreateAnonymousThread(
   procedure
   begin
-    try
-     TLoading.Show('Autenticando usuário.',frmLogin);
-     sleep(2000);
-     Validado := False;
-     TThread.Synchronize(nil,
-      procedure
-      begin
-        ControllerLogin.ModeloLogin.Login := Trim(edtLogin.Text);
-        ControllerLogin.ModeloLogin.Senha := Trim(edtSenha.Text);
+   TLoading.Show('Autenticando usuário.',Self);
+   sleep(2000);
+   Validado := False;
+   TThread.Synchronize(nil,
+    procedure
+    begin
+      ControllerLogin.ModeloLogin.Login := Trim(edtLogin.Text);
+      ControllerLogin.ModeloLogin.Senha := Trim(edtSenha.Text);
 
-        if ControllerLogin.ModeloLogin.AutenticarLogin then
-           Close
-      end);
-    finally
-      TLoading.Hide;
-    end;
-  end).Start;
+      if ControllerLogin.ModeloLogin.AutenticarLogin then
+         Validado := True
+    end);
+  end);
+  LTread.OnTerminate := ValidaLogin;
+  LTread.Start;
+
+end;
+
+procedure TfrmLogin.ValidaLogin(Sender: TObject);
+begin
+  TLoading.Hide;
 
   if Validado then
-    ShowMessage('tudo certo')
-  else ShowMessage('erro ao logar');
+    Close
+  else ShowMessage('Erro ao logar');
 
+  if Sender is TThread then
+  begin
+    if Assigned(TThread(Sender).FatalException) then
+    begin
+      ShowMessage(Exception(TThread(sender).FatalException).Message);
+      exit;
+    end;
+  end;
 end;
 
 

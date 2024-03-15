@@ -1,0 +1,50 @@
+unit uControllerLogin;
+
+interface
+
+uses ulogin,System.SysUtils;
+
+type
+  TControllerPessoa = class
+    private
+    FModeloLogin: TLogin;
+
+    public
+      property ModeloLogin: TLogin read FModeloLogin write FModeloLogin;
+
+      constructor Create;
+      destructor destroy; override;
+  end;
+
+implementation
+
+{ TControllerVenda }
+
+function TControllerPessoa.BuscarPessoa(nCdPessoa: string): TFDQuery;
+begin
+  result := FModeloPessoa.BuscarPessoa(nCdPessoa);
+end;
+
+constructor TControllerPessoa.Create;
+begin
+  FModeloPessoa := TPessoa.Create;
+  inherited Create;
+end;
+
+destructor TControllerPessoa.destroy;
+begin
+  FreeAndNil(FModeloPessoa);
+  inherited;
+end;
+
+function TControllerPessoa.Listar(Busca: string): TFDQuery;
+begin
+  result := FModeloPessoa.Listar(busca);
+end;
+
+function TControllerPessoa.Persistir: Boolean;
+begin
+  result := FModeloPessoa.Persistir;
+end;
+
+end.

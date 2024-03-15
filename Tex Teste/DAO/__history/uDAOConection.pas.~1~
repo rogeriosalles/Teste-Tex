@@ -1,0 +1,55 @@
+unit uDAOConection;
+
+interface
+
+uses Data.DB, Data.Win.ADODB,system.SysUtils;
+
+type
+  TDAOConection = class
+    private
+      FConection : TADOConnection;
+    public
+      function getConection : TADOConnection;
+      function CriarQuery: TADOQuery;
+      constructor Create;
+      destructor Destroy; Override;
+  end;
+
+implementation
+
+{ TDAOConection SQLOLEDB.1 }
+
+constructor TDAOConection.Create;
+begin
+  inherited Create;
+
+  FConection := TADOConnection.Create(nil);
+  FConection.LoginPrompt := false;
+  FConection.ConnectionString := 'Provider=SQLOLEDB.1;Password=sa;Persist Security Info=True;User ID=sa;Initial Catalog=POSTOABC;Data Source=DESKTOP-DGMIPR9';
+  FConection.ConnectOptions := coConnectUnspecified;
+end;
+
+function TDAOConection.CriarQuery: TADOQuery;
+var
+  Query : TADOQuery;
+begin
+  Query := TADOQuery.Create(nil);
+  Query.Connection := FConection;
+
+  result := Query;
+end;
+
+destructor TDAOConection.Destroy;
+begin
+
+  inherited;
+
+  FreeAndNil(FConection);
+end;
+
+function TDAOConection.getConection: TADOConnection;
+begin
+   result := FConection;
+end;
+
+end.

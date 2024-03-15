@@ -1,0 +1,26 @@
+unit uLogin;
+
+interface
+
+type
+  TLogin = class
+    private
+    FLogin: string;
+    FSenha: string;
+
+    public
+      property Login: string read FLogin write FLogin;
+      property Senha: string read FSenha write FSenha;
+      function AutenticarLogin: Boolean;
+  end;
+
+implementation
+
+{ TLogin }
+
+function TLogin.AutenticarLogin: Boolean;
+begin
+
+end;
+
+end.

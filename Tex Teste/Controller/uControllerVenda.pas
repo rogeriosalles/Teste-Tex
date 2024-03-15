@@ -1,0 +1,51 @@
+unit uControllerVenda;
+
+interface
+
+uses uPessoa,System.SysUtils,FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.SQLite,
+  FireDAC.Phys.SQLiteDef, FireDAC.Stan.ExprFuncs,
+  FireDAC.Phys.SQLiteWrapper.Stat, FireDAC.FMXUI.Wait,
+  FireDAC.Comp.Client;
+
+type
+  TControllerVenda = class
+    private
+    FModeloPessoa: TPessoa;
+
+    public
+      property ModeloPessoa: TPessoa  read FModeloPessoa write FModeloPessoa;
+      function Persistir: Boolean;
+      function Listar: TFDQuery;
+      constructor Create;
+      destructor destroy; override;
+  end;
+
+implementation
+
+{ TControllerVenda }
+
+constructor TControllerVenda.Create;
+begin
+  FModeloPessoa := TPessoa.Create;
+  inherited Create;
+end;
+
+destructor TControllerVenda.destroy;
+begin
+  FreeAndNil(FModeloPessoa);
+  inherited;
+end;
+
+function TControllerVenda.Listar: TFDQuery;
+begin
+  result := FModeloPessoa.Listar;
+end;
+
+function TControllerVenda.Persistir: Boolean;
+begin
+  result := FModeloPessoa.Persistir;
+end;
+
+end.

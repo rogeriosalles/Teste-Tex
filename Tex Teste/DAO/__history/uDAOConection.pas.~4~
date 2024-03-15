@@ -1,0 +1,61 @@
+unit uDAOConection;
+
+interface
+
+uses Data.DB, Data.Win.ADODB,system.SysUtils,FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.SQLite,
+  FireDAC.Phys.SQLiteDef, FireDAC.Stan.ExprFuncs,
+  FireDAC.Phys.SQLiteWrapper.Stat, FireDAC.FMXUI.Wait,
+  FireDAC.Comp.Client;
+
+type
+  TDAOConection = class
+    private
+      FConnection : TFDConnection;
+
+    public
+      function getConection : TFDConnection;
+      function CriarQuery: TADOQuery;
+      constructor Create;
+      destructor Destroy; Override;
+  end;
+
+implementation
+
+{ TDAOConection SQLOLEDB.1 }
+
+constructor TDAOConection.Create;
+begin
+  inherited Create;
+
+  FConnection := TFDConnection.Create(nil);
+  FConnection.LoginPrompt := false;
+  FConnection.ConnectionString := 'Provider=SQLOLEDB.1;Password=sa;Persist Security Info=True;User ID=sa;Initial Catalog=POSTOABC;Data Source=DESKTOP-DGMIPR9';
+
+end;
+
+function TDAOConection.CriarQuery: TADOQuery;
+var
+  Query : TADOQuery;
+begin
+  Query := TADOQuery.Create(nil);
+  Query.Connection := FConnection;
+
+  result := Query;
+end;
+
+destructor TDAOConection.Destroy;
+begin
+
+  inherited;
+
+  FreeAndNil(FConection);
+end;
+
+function TDAOConection.getConection: TADOConnection;
+begin
+   result := FConection;
+end;
+
+end.

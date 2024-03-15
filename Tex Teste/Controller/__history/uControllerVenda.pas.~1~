@@ -1,0 +1,46 @@
+unit uControllerVenda;
+
+interface
+
+uses uVenda,System.SysUtils,Data.Win.ADODB;
+
+type
+  TControllerVenda = class
+    private
+    FModeloVenda: TVenda;
+
+    public
+      property ModeloVenda: TVenda  read FModeloVenda write FModeloVenda;
+      function Persistir: Boolean;
+      function Listar: TADOQuery;
+      constructor Create;
+      destructor destroy; override;
+  end;
+
+implementation
+
+{ TControllerVenda }
+
+constructor TControllerVenda.Create;
+begin
+  FModeloVenda := TVenda.Create;
+  inherited Create;
+end;
+
+destructor TControllerVenda.destroy;
+begin
+  FreeAndNil(FModeloVenda);
+  inherited;
+end;
+
+function TControllerVenda.Listar: TADOQuery;
+begin
+  result := FModeloVenda.Listar;
+end;
+
+function TControllerVenda.Persistir: Boolean;
+begin
+  result := FModeloVenda.Persistir;
+end;
+
+end.

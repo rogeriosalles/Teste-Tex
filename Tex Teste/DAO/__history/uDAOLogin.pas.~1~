@@ -1,0 +1,25 @@
+unit uDAOLogin;
+
+interface
+
+uses
+  uLogin;
+
+type
+  TDAOLogin = class
+    private
+
+    public
+     function AutenticarLogin: Boolean;
+  end;
+
+implementation
+
+{ TDAOLogin }
+
+function TDAOLogin.AutenticarLogin: Boolean;
+begin
+
+end;
+
+end.

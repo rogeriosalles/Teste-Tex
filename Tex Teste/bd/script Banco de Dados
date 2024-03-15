@@ -1,0 +1,23 @@
+create table Pessoa (nCdPessoa  integer primary key AUTOINCREMENT,
+                     cNome varchar(100),
+                     cRG varchar(10),
+                     dDataNascimnento date,
+                     nCEP integer,
+                     cLogradouro,
+                     cComplemento varchar(50),
+                     cBairro varchar(50),
+                     cCidade varchar(100),
+                     cUF varchar(2)
+                     cNumero varchar(10));
+                     
+create table Usuario (nCdUsuario integer primary key AUTOINCREMENT,
+                     nCdPessoa integer,
+                     cLogin varchar(30),
+                     cPassword varchar(20),
+                     CONSTRAINT PK_NCDPESSOA FOREIGN KEY (nCdPessoa) REFERENCES Pessoa(nCdPessoa));
+                     
+INSERT INTO Pessoa (cNome,cRG,dDataNascimnento,nCEP,cLogradouro,cComplemento,cBairro,cCidade,cUF) 
+            VALUES ('Rogério','350136488','30/01/1986','08566100','Rua Associação atletica Poaense','','Jardim Emilia','Poá','SP');
+
+                     
+INSERT INTO Usuario (nCdPessoa,cLogin,cPassword) VALUES (1,'rogerio','123456');

@@ -7,5 +7,3 @@ O objetivo do teste era testar as habilidades em um CRUD simples, com uma consul
 O teste consiste em um CRUD de pessoas, com consulta de CEP via REST FULL, solicitado também uma parte de autenticação de login.
 
 Para efetuar o login utilizei POO deixando toda responsabilidade de validação para camada de modelo. Assim foi feito para o cadastro de pessoas também.
-
-Podemos ver no vídeo abaixo como podemos fazer um sistema “simples” se tornar algo mais atrativo para os olhos e creio que isso me ajudou a passar por todas as fases da entrevista.
